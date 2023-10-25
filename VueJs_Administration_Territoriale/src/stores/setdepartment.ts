@@ -5,11 +5,10 @@ import { required, minLength } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 import clientHttp from "@/libs/clientHttp";
 import axios from 'axios'
+import type { Department } from "@/types/department"
 import { toast, toastContainers } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 export const useSetDepartmentStore = defineStore('departments', () => {
-    let res = ref<Error>('')
-
     const departmentData = ref({
         name: '',
         location: ''
@@ -32,40 +31,53 @@ export const useSetDepartmentStore = defineStore('departments', () => {
     const setdepartment = async () => {
 
         const datavalidate = await data.value.$validate();
-        console.log(departmentData.value);
+        console.log(departmentData);
 
         if (datavalidate) {
-
-            await clientHttp.post('department/post', {
-                'name': departmentData.value.name,
-                'location': departmentData.value.location
-
-            }).then((response) => {
-                console.log(response.data);
+            clientHttp.post('department/post', departmentData.value)
+            .then((response) => {
                 toast.success(response.data)
-                return res.value = response.data
-
             }).catch(err => {
                 toast.error(err.message)
-                /* toast.error(err.message,{
-                    toastStyle:{
-                        background:'red',
-                        color: 'white'
-                    }
-                }) */
             })
+        } else {
 
-        }else{
-            toast.POSITION.TOP_CENTER
-            
-            return toast.error('Echec de l\'envoi'!,{
-                toastStyle:{
-                    background:'green'
-                }
+            return toast.error('Echec de l\'envoi'!, {
+              /*   toastStyle: {
+                    background: 'green'
+                } */
             })
         }
     }
 
 
-    return { setdepartment, data, departmentData, res}
+    /* const allDepartment = ref<Department[]>([])
+    const error = ref<Error>('')
+
+    const department = async () => {
+        const getdepartment = await clientHttp.get('/department')
+        try {
+
+            if (!getdepartment) {
+                return error.value = 'Oops...! Qlqch s\'est mal passée !'
+            }
+            else if (getdepartment.data.length === 0) {
+                return error.value = 'Donnée Non disponible!'
+            }
+
+            allDepartment.value = getdepartment.data;
+            console.log(allDepartment.value);
+
+            return allDepartment.value;
+
+        } catch (err: any) {
+            error.value = err
+            console.log(err);
+            return error.value
+        }
+    } */
+    
+
+
+    return { setdepartment, data, departmentData}
 })

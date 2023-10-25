@@ -6,16 +6,14 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var registrationRouter = require('./routes/registration')
+
 var departmentRouter = require('./routes/department');
 var municipalityRouter = require('./routes/municipality');
-//var setDepartment = require('./routes/department').setdepartment;
-//var getDepartment = require('./routes/department').getdepartment;
-//var getDepartmentSpecifiq = require('./routes/department').getdepartmentspecifiq;
-/* var setMunicipality = require('./routes/municipality').setmunicipality;
-var getMunicipality = require('./routes/municipality').getmunicipality; */
-var districtRouter = require('./routes/district')
-/* var setDistrict = require('./routes/district').setdistrict;
-var getDistrict = require('./routes/district').getdistrict; */
+var districtRouter = require('./routes/district');
+
+const authentification = require('./middleware/authentication.middleware.js');
+
 var app = express();
 
   // Json parsing
@@ -43,7 +41,9 @@ app.use(function(req, res, next){
 });
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/users', authentification, usersRouter);
+app.use('/auth', registrationRouter);
+
 app.use('/department', departmentRouter);
 app.use('/municipality', municipalityRouter);
 app.use('/district', districtRouter)

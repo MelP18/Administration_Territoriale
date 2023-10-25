@@ -36,7 +36,7 @@ const setDepartment = async (req, res, next) =>{
         }
         return res.status(201).json('Département ajouté avec succès !');
     }catch(err){
-        return res.status(400).json({message: err})
+        return res.status(400).json({message: err.message})
     } 
 }
 

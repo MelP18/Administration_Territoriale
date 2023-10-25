@@ -5,7 +5,11 @@ module.exports = {
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      minHeight:{
+        'min-h': 'calc(100vh - 289px)'
+      }
+    },
   },
   plugins: [],
 }
